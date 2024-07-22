@@ -24,6 +24,7 @@ def source():
     return reader
 
 
+@pytest.mark.usefixtures("with_plugins")
 class TestExtractRecords:
     @pytest.mark.parametrize(
         "filename",
@@ -46,7 +47,7 @@ class TestExtractRecords:
         assert records == [{"type": "dataset"}, {"type": "dataset"}]
 
 
-@pytest.mark.usefixtures("clean_db")
+@pytest.mark.usefixtures("with_plugins", "clean_db")
 class TestImportRecords:
     @pytest.mark.parametrize(
         "filename",
