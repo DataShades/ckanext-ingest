@@ -2,37 +2,17 @@
 
 # ckanext-ingest
 
-Framework for data import from arbitrary sources.
+Framework for transforming data stream into tasks.
 
-Note: this extension has no aim to perform import of every possible data source
-into CKAN. Instead, it defines a structure and rules for making import more
-predictable, reusable and flexible.
+This extension provides tools for reading user-provided file-like object and
+producing tasks based on the input. Use it if you need to read records from
+CSV/JSON/XLSX/etc. file and:
 
-This extension can be used if you need to:
-
-* Create datasets/resources/etc using data from multiple files. But you want do
-  import all files in a similar manner and don't want to spend time introducing
-  and explaining the whole process.
-* reuse ingestion logic in different projects
-* share pieces of logic between different ingestion workflows
-
-And you probably don't need it if you want to:
-
-* import a single file using CLI once and and never do it again.
-
-
-## Structure
-
-* [Requirements](#requirements)
-* [Installation](#installation)
-* [Usage](#usage)
-* [Examples](#examples)
-* [Advanced](#advanced)
-* [Configuration](#configuration)
-* [Interfaces](#interfaces)
-* [API](#api)
-  * [`ingest_extract_records`](#ingest_extract_records)
-  * [`ingest_import_records`](#ingest_import_records)
+* create or update datasets using information from these records
+* remove users/organizations/datasets based on record details
+* send email to user specified by every record
+* collect some sort of statistics
+* perform any type of work that can be described as a series of steps
 
 ## Requirements
 
@@ -42,6 +22,7 @@ Compatibility with core CKAN versions:
 |--------------|-------------|
 | 2.9          | no          |
 | 2.10         | yes         |
+| 2.11         | yes         |
 | master       | yes         |
 
 
@@ -98,7 +79,7 @@ class MyPlugin(p.SingletonPlugin):
 
     def get_ingest_strategies(self):
         return {
-          "my:custom_strategy": CustomStrategy
+          "my:custom_strategy": CustomStrategy,
         }
 
 ```
@@ -272,7 +253,7 @@ class JsonStrategy(ExtractionStrategy):
 ```
 
 If there are more than one strategy that supports JSON mimetype, the first
-registered strategy is selected. If you want to register strategy that aalways
+registered strategy is selected. If you want to register strategy that always
 handles JSON sources with specific name(`DRINK_ME.json`), disregarding the
 order, you can use `must_handle`.
 
@@ -427,7 +408,7 @@ class DenseRecord(Record):
 
 ```
 
-### Record ingestion and rsults
+### Record ingestion and results
 
 Record usually calls one of CKAN API actions during ingestion. In order to do
 it properly, record needs action `context`, which is passed as as single
