@@ -81,3 +81,7 @@ class Type(enum.Enum):
     stats = StatArtifacts
     details = DetailedArtifacts
     tmp = TmpArtifacts
+
+    @classmethod
+    def from_report(cls, report: Artifacts):
+        return cls(type(report))

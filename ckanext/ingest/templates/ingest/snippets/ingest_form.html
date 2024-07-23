@@ -11,6 +11,11 @@
     {% endcall %}
     {{ form.checkbox("update_existing", label=_('Update existing'), value=true) }}
 
+    {{ form.select("report", label=_('Report type'), options=[
+        {"value": "details", "text": "Detailed"},
+        {"value": "stats", "text": "Overview"},
+    ]) }}
+
     <div class="form-actions">
         <button type="submit" class="btn btn-default" >{{ _('Ingest') }}</button>
     </div>

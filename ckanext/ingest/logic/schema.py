@@ -14,6 +14,18 @@ from ckan.logic.schema import validator_args
 from ckanext.ingest import artifact, shared
 
 
+def into_report(value: Any):
+    """Transform value into report object."""
+    if isinstance(value, artifact.Artifacts):
+        return value
+
+    try:
+        return artifact.make_artifacts(value)
+    except KeyError as err:
+        msg = f"Unsupported report type: {value} ({type(value)})"
+        raise tk.Invalid(msg) from err
+
+
 def into_uploaded_file(value: Any):
     """Try converting value into shared.Storage object."""
     if isinstance(value, shared.Storage):
@@ -76,7 +88,7 @@ def import_records(
     schema = extract_records()
     schema.update(
         {
-            "report": [default("stats"), one_of([t.name for t in artifact.Type])],
+            "report": [default("stats"), into_report],
             "defaults": [default("{}"), convert_to_json_if_string, dict_only],
             "overrides": [default("{}"), convert_to_json_if_string, dict_only],
         },

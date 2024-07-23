@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
+from dominate import tags
 from flask import Blueprint
 from flask.views import MethodView
 
@@ -9,7 +10,7 @@ import ckan.plugins.toolkit as tk
 from ckan.lib import base
 from ckan.logic import parse_params
 
-from . import config
+from . import artifact, config
 
 ingest = Blueprint("ingest", __name__)
 
@@ -37,19 +38,57 @@ class IngestView(MethodView):
         self._check_access()
 
         try:
-            data = parse_params(tk.request.form)
+            data: dict[str, Any] = parse_params(tk.request.form)
             data.update(parse_params(tk.request.files))
-            result = tk.get_action("ingest_import_records")({}, data)
+            data.update(
+                {
+                    "options": {
+                        "record_options": {
+                            "update_existing": tk.asbool(
+                                data.pop("update_existing", False)
+                            )
+                        }
+                    }
+                }
+            )
 
-            for id_ in result:
-                pkg = tk.get_action("package_show")({}, {"id": id_})
+            try:
+                report = artifact.make_artifacts(cast(str, data.pop("report", "stats")))
+            except KeyError as err:
+                raise tk.ValidationError({"report": ["Unknown report type"]}) from err
+
+            result = tk.get_action("ingest_import_records")(
+                {}, dict(data, report=report)
+            )
+
+            report_type = artifact.Type.from_report(report)
+            if report_type is artifact.Type.details:
+                for ingested in result:
+                    if ingested["success"]:
+                        pkg = tk.get_action("package_show")(
+                            {}, ingested["result"]["result"]
+                        )
+                        tk.h.flash_success(
+                            "Success: <a href='{url}'>{title}</a>".format(
+                                title=pkg["title"],
+                                url=tk.h.url_for(pkg["type"] + ".read", id=pkg["name"]),
+                            ),
+                            True,
+                        )
+
+                    else:
+                        with tags.ul() as msg:  # type: ignore
+                            for field, errors in ingested["error"].items():
+                                tags.li("{}: {}".format(field, "; ".join(errors)))
+                        tk.h.flash_error(msg, True)
+
+            elif report_type is artifact.Type.stats:
                 tk.h.flash_success(
-                    "Success: <a href='{url}'>{title}</a>".format(
-                        title=pkg["title"],
-                        url=tk.h.url_for(pkg["type"] + ".read", id=pkg["name"]),
-                    ),
-                    True,
+                    "Success: {success}</br>Failed: {fail}".format(**result), True
                 )
+
+            else:
+                tk.h.flash_success("Ingestion finished")
 
             return tk.redirect_to("ingest.index")
 

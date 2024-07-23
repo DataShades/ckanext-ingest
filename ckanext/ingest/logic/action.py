@@ -10,7 +10,6 @@ from ckan import types
 from ckan.logic import validate
 
 from ckanext.ingest import shared
-from ckanext.ingest.artifact import make_artifacts
 
 from . import schema
 
@@ -85,7 +84,7 @@ def ingest_import_records(context: types.Context, data_dict: dict[str, Any]):
     if stop is not None:
         stop += start
 
-    artifacts = make_artifacts(data_dict["report"])
+    report = data_dict["report"]
     records = iter_records(data_dict)
 
     for record in itertools.islice(records, start, stop):
@@ -97,21 +96,30 @@ def ingest_import_records(context: types.Context, data_dict: dict[str, Any]):
 
         except tk.ValidationError as e:
             log.debug("Validation error: %s. Record: %s", e.error_dict, record)
-            artifacts.fail({"error": e.error_dict, "source": record.raw})
+            report.fail({"error": e.error_dict, "source": record.raw})
 
         except tk.ObjectNotFound as e:
             log.debug("Object not found: %s. Record: %s", e, record)
-            artifacts.fail(
+            report.fail(
                 {
                     "error": e.message or "Not found",
                     "source": record.raw,
                 },
             )
 
-        else:
-            artifacts.success({"result": result})
+        except Exception as e:
+            log.exception("Unexpected ingestion error for record %s", record)
+            report.fail(
+                {
+                    "error": str(e),
+                    "source": record.raw,
+                },
+            )
 
-    return artifacts.collect()
+        else:
+            report.success({"result": result})
+
+    return report.collect()
 
 
 def iter_records(data_dict: dict[str, Any]) -> Iterable[shared.Record]:
