@@ -40,17 +40,11 @@ class IngestView(MethodView):
         try:
             data: dict[str, Any] = parse_params(tk.request.form)
             data.update(parse_params(tk.request.files))
-            data.update(
-                {
-                    "options": {
-                        "record_options": {
-                            "update_existing": tk.asbool(
-                                data.pop("update_existing", False)
-                            )
-                        }
-                    }
+            data["options"] = {
+                "record_options": {
+                    "update_existing": tk.asbool(data.pop("update_existing", False))
                 }
-            )
+            }
 
             try:
                 report = artifact.make_artifacts(cast(str, data.pop("report", "stats")))
