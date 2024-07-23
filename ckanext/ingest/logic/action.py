@@ -32,7 +32,6 @@ def ingest_extract_records(
     `iter_records` function that produces an iterable over records.
 
     Args:
-
         source: str|FileStorage - data source for records
 
         strategy: str|None - record extraction strategy. If missing, strategy
@@ -62,7 +61,6 @@ def ingest_import_records(context: types.Context, data_dict: dict[str, Any]):
     `Record.ingest`, potentially creating/updating data.
 
     Args:
-
         source: str|FileStorage - data source for records
 
         strategy: str|None - record extraction strategy. If missing, strategy
@@ -80,7 +78,6 @@ def ingest_import_records(context: types.Context, data_dict: dict[str, Any]):
 
         take: int - max number of records that will be ingested
     """
-
     tk.check_access("ingest_import_records", context, data_dict)
 
     start = data_dict["skip"]

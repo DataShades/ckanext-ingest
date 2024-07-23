@@ -130,8 +130,7 @@ class ExtractionStrategy:
         return False
 
     def chunks(self, source: Storage, options: StrategyOptions) -> Iterable[Any]:
-        """Iterate over separate chunks of data with correpoinding options
-        suitable for Record creation."""
+        """Produce chunks of data."""
         return []
 
     def chunk_into_record(self, chunk: Any, options: StrategyOptions) -> Record:
@@ -187,24 +186,22 @@ def make_storage(
     name: str | None = None,
     mimetype: str | None = None,
 ):
-    """Transform bytes stream(BytesIO), string or bytes into source object
-    expected by ExtractionStrategy.
+    """Transform incoming stream into standard format.
 
+    Transform bytes stream(BytesIO), string or bytes into source object
+    expected by ExtractionStrategy.
     """
     if isinstance(stream, str):
         stream = stream.encode()
 
-    if isinstance(stream, bytes):
+    if isinstance(stream, (bytes, bytearray, memoryview)):
         stream = BytesIO(stream)
 
     return Storage(stream, name, content_type=mimetype)
 
 
 def get_extra(options: StrategyOptions | RecordOptions, key: str, default: T) -> T:
-    """Safely return an item from `extras` member of strategy or record
-    options.
-
-    """
+    """Safely return an item from strategy `extras`."""
     return options.setdefault("extras", {}).get(key, default)
 
 

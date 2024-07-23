@@ -11,10 +11,13 @@ TransformationSchema: TypeAlias = "dict[str, Field]"
 
 _default = object()
 
+
 @dataclasses.dataclass
 class Options:
-    """Transformation options taken from `{profile}_options` attribute of field
-    in ckanext-scheming's schema
+    """Transformation options.
+
+    This information is taken from `{profile}_options` attribute of field in
+    ckanext-scheming's schema.
 
     These options define how raw value passed into the Record transforms into
     proper value that is suitable for the entity's schema. Workflow is the
@@ -161,7 +164,7 @@ def _normalize_choice(
     choices: list[dict[str, str]],
     separator: str,
 ) -> str | list[str] | None:
-    """Transform select label[s] into corresponding value[s]"""
+    """Transform select label[s] into corresponding value[s]."""
     if not value:
         return None
 

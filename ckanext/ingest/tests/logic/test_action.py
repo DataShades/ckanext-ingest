@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 import mimetypes
 import os
-from typing import Optional
 
 import pytest
 
@@ -14,7 +15,7 @@ from ckanext.ingest import shared
 def source():
     data = os.path.join(os.path.dirname(__file__), "data")
 
-    def reader(filename: str, mime: Optional[str] = None):
+    def reader(filename: str, mime: str | None = None):
         if mime is None:
             mime, _enc = mimetypes.guess_type(filename)
 

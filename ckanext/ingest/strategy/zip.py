@@ -19,7 +19,7 @@ class ZipChunk(TypedDict):
     handler: shared.ExtractionStrategy
     name: str
     source: shared.Storage
-    locator: Callable[[str], IO[bytes]]
+    locator: Callable[[str], IO[bytes] | None]
 
 
 class ZipStrategy(shared.ExtractionStrategy):

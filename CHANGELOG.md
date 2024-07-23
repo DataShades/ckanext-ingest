@@ -88,4 +88,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [v1.0.0](https://github.com/DataShades/ckanext-ingest/releases/tag/v1.0.0) - 2022-02-07
 
 <small>[Compare with first commit](https://github.com/DataShades/ckanext-ingest/compare/5218fb4ae2e6c806e027ff44a5a17bd41377967c...v1.0.0)</small>
-

@@ -15,7 +15,7 @@ from ckanext.ingest import artifact, shared
 
 
 def into_uploaded_file(value: Any):
-    """Try converting value into shared.Storage object"""
+    """Try converting value into shared.Storage object."""
     if isinstance(value, shared.Storage):
         return value
 

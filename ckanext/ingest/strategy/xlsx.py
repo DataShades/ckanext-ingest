@@ -4,20 +4,16 @@ In current state this SeedExcelStrategy has no sense. But I hope that I find
 resources to rewrite it and create a proper base XLSX strategy.
 
 """
+
 from __future__ import annotations
 
 import logging
 from typing import IO, Callable, Iterable, TypedDict, cast
 
+from openpyxl import Workbook, load_workbook
+from openpyxl.worksheet.worksheet import Worksheet
+
 from ckanext.ingest import shared
-
-try:
-    from openpyxl import Workbook, load_workbook
-    from openpyxl.worksheet.worksheet import Worksheet
-
-    is_installed = True
-except ImportError:
-    is_installed = False
 
 log = logging.getLogger(__name__)
 
@@ -60,11 +56,13 @@ class XlsxStrategy(shared.ExtractionStrategy):
             yield {
                 "sheet": sheet,
                 "document": doc,
-                "locator": lambda name: doc[name] if name in doc else None,
+                "locator": lambda name: doc.get(name, None),  # type: ignore
             }
 
     def extract(
-        self, source: shared.Storage, options: shared.StrategyOptions,
+        self,
+        source: shared.Storage,
+        options: shared.StrategyOptions,
     ) -> Iterable[shared.Record]:
         extras = options.get("extras", {})
 

@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import contextlib
+
 import ckan.plugins.toolkit as tk
-from ckan import common, plugins
+from ckan import common
+from ckan import plugins as p
 
 from . import config, interfaces, shared
 
@@ -12,10 +15,10 @@ from . import config, interfaces, shared
 @tk.blanket.cli
 @tk.blanket.blueprints
 @tk.blanket.config_declarations
-class IngestPlugin(plugins.SingletonPlugin):
-    plugins.implements(plugins.IConfigurer)
-    plugins.implements(plugins.IConfigurable)
-    plugins.implements(interfaces.IIngest, inherit=True)
+class IngestPlugin(p.SingletonPlugin):
+    p.implements(p.IConfigurer)
+    p.implements(p.IConfigurable)
+    p.implements(interfaces.IIngest, inherit=True)
 
     # IConfigurer
 
@@ -31,7 +34,7 @@ class IngestPlugin(plugins.SingletonPlugin):
         blacklist = config.disabled_strategies()
         name_mapping = config.name_mapping()
 
-        for plugin in plugins.PluginImplementations(interfaces.IIngest):
+        for plugin in p.PluginImplementations(interfaces.IIngest):
             for name, s in plugin.get_ingest_strategies().items():
                 final_name = name_mapping.get(f"{s.__module__}:{s.__name__}", name)
 
@@ -45,13 +48,16 @@ class IngestPlugin(plugins.SingletonPlugin):
 
     # IIngest
     def get_ingest_strategies(self) -> dict[str, type[shared.ExtractionStrategy]]:
-        from .strategy import csv, xlsx, zip
+        from .strategy import csv, zip
 
-        strategies = {
+        strategies: dict[str, type[shared.ExtractionStrategy]] = {
             "ingest:recursive_zip": zip.ZipStrategy,
             "ingest:scheming_csv": csv.CsvStrategy,
         }
-        if xlsx.is_installed:
-            strategies["ingest:xlsx"] = xlsx.XlsxStrategy
+
+        with contextlib.suppress(ImportError):
+            from .strategy.xlsx import XlsxStrategy
+
+            strategies["ingest:xlsx"] = XlsxStrategy
 
         return strategies
