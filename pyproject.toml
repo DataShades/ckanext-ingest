@@ -1,3 +1,47 @@
+[build-system]
+requires = [ "setuptools",]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ckanext-ingest"
+version = "1.4.2.post1"
+description = ""
+classifiers = [ "Development Status :: 4 - Beta", "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)", "Programming Language :: Python :: 3.8", "Programming Language :: Python :: 3.9", "Programming Language :: Python :: 3.10", "Programming Language :: Python :: 3.11",]
+keywords = [ "CKAN",]
+requires-python = ">= 3.8"
+dependencies = [ "typing_extensions",]
+authors = [
+    {name = "DataShades", email = "datashades@linkdigital.com.au"},
+    {name = "Sergey Motornyuk", email = "sergey.motornyuk@linkdigital.com.au"},
+]
+maintainers = [
+    {name = "DataShades", email = "datashades@linkdigital.com.au"},
+]
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
+
+[project.license]
+text = "AGPL"
+
+[project.urls]
+Homepage = "https://github.com/DataShades/ckanext-ingest"
+
+[project.optional-dependencies]
+test = [ "pytest-ckan", "ckanext-scheming",]
+dev = [ "pytest-ckan", "ckanext-scheming",]
+xlsx = [ "openpyxl",]
+
+[project.entry-points."ckan.plugins"]
+ingest = "ckanext.ingest.plugin:IngestPlugin"
+
+[project.entry-points."babel.extractors"]
+ckan = "ckan.lib.extract:extract_ckan"
+
+[tool.setuptools.packages]
+find = {}
+
 [tool.ruff]
 target-version = "py38"
 
@@ -75,9 +119,6 @@ self = ["ckanext.ingest"]
 [tool.pytest.ini_options]
 addopts = "--ckan-ini test.ini"
 filterwarnings = [
-               "ignore::sqlalchemy.exc.SADeprecationWarning",
-               "ignore::sqlalchemy.exc.SAWarning",
-               "ignore::DeprecationWarning",
 ]
 
 [tool.pyright]
