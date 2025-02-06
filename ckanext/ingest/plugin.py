@@ -52,6 +52,7 @@ class IngestPlugin(p.SingletonPlugin):
 
         strategies: dict[str, type[shared.ExtractionStrategy]] = {
             "ingest:recursive_zip": zip.ZipStrategy,
+            "ingest:simple_csv": csv.CsvSimpleStrategy,
             "ingest:scheming_csv": csv.CsvStrategy,
         }
 

@@ -25,6 +25,7 @@ def source():
     return reader
 
 
+@pytest.mark.ckan_config("ckanext.ingest.strategy.disabled", ["ingest:simple_csv"])
 @pytest.mark.usefixtures("with_plugins")
 class TestExtractRecords:
     @pytest.mark.parametrize(
@@ -48,6 +49,7 @@ class TestExtractRecords:
         assert records == [{"type": "dataset"}, {"type": "dataset"}]
 
 
+@pytest.mark.ckan_config("ckanext.ingest.strategy.disabled", ["ingest:simple_csv"])
 @pytest.mark.usefixtures("with_plugins", "clean_db")
 class TestImportRecords:
     @pytest.mark.parametrize(

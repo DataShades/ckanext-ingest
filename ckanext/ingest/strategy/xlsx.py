@@ -8,7 +8,7 @@ resources to rewrite it and create a proper base XLSX strategy.
 from __future__ import annotations
 
 import logging
-from typing import IO, Callable, Iterable, TypedDict, cast
+from typing import IO, Any, Callable, Iterable, TypedDict, cast
 
 from openpyxl import Workbook, load_workbook
 from openpyxl.worksheet.worksheet import Worksheet
@@ -72,14 +72,24 @@ class XlsxStrategy(shared.ExtractionStrategy):
                 max_row=extras.get("max_row"),
                 min_col=extras.get("min_col"),
                 max_col=extras.get("max_col"),
+                values_only=True,
             )
             header = None
+            skip_empty = extras.get("skip_empty", False)
+
             if extras.get("with_header"):
-                header = [c.value for c in next(rows)]
+                for row in rows:
+                    header = list(row)
+                    if not skip_empty or any(header):
+                        break
 
             for row in rows:
-                values = [c.value for c in row]
-                data = dict(zip(header, values)) if header else values
+                values = list(row)
+                if skip_empty and not any(values):
+                    continue
+                data: dict[Any, Any] | list[Any] = (
+                    dict(zip(header, values)) if header else values
+                )
 
                 yield self.chunk_into_record(
                     {"row": data},

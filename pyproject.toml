@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ckanext-ingest"
-version = "1.4.2.post1"
+version = "1.4.3"
 description = ""
 classifiers = [ "Development Status :: 4 - Beta", "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)", "Programming Language :: Python :: 3.8", "Programming Language :: Python :: 3.9", "Programming Language :: Python :: 3.10", "Programming Language :: Python :: 3.11",]
 keywords = [ "CKAN",]
@@ -80,7 +80,6 @@ select = [
 ignore = [
        "RET503", # don't enforce return-None
        "E712", # comparison to bool: violated by SQLAlchemy filters
-       "PT004", # fixture does not return anything, add leading underscore: violated by clean_db
        "PLC1901", # simplify comparison to empty string: violated by SQLAlchemy filters
 ]
 
