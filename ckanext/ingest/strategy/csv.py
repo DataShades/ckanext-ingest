@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 class CsvSimpleStrategy(shared.ExtractionStrategy):
     """Extract records from CSV."""
 
-    mimetypes = {"text/csv"}
+    mimetypes = {"text/csv", "application/csv"}
 
     def chunks(
         self,
