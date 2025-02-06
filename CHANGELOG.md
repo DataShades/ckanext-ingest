@@ -6,15 +6,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
-## Unreleased
+## [1.4.3](https://github.com/DataShades/ckanext-ingest/releases/tag/1.4.3) - 2025-02-06
 
-<small>[Compare with latest](https://github.com/DataShades/ckanext-ingest/compare/v1.4.2...HEAD)</small>
+<small>[Compare with v1.4.2](https://github.com/DataShades/ckanext-ingest/compare/v1.4.2...1.4.3)</small>
+
+### Features
+
+- simple_csv strategy ([fa092d8](https://github.com/DataShades/ckanext-ingest/commit/fa092d8798197f55ff0e235ea1b099f3d42ec422) by Sergey Motornyuk).
 
 ### Bug Fixes
 
 - fix reporting on example view page ([1be4ce5](https://github.com/DataShades/ckanext-ingest/commit/1be4ce54120f3c01237a15dc37f0a83119d260ae) by Sergey Motornyuk).
 
-<!-- insertion marker -->
 ## [v1.4.2](https://github.com/DataShades/ckanext-ingest/releases/tag/v1.4.2) - 2024-07-23
 
 <small>[Compare with v1.4.1](https://github.com/DataShades/ckanext-ingest/compare/v1.4.1...v1.4.2)</small>
