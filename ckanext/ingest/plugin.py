@@ -48,10 +48,11 @@ class IngestPlugin(p.SingletonPlugin):
 
     # IIngest
     def get_ingest_strategies(self) -> dict[str, type[shared.ExtractionStrategy]]:
-        from .strategy import csv, zip
+        from .strategy import csv, zip, json
 
         strategies: dict[str, type[shared.ExtractionStrategy]] = {
             "ingest:recursive_zip": zip.ZipStrategy,
+            "ingest:json_list": json.ListStrategy,
             "ingest:simple_csv": csv.CsvSimpleStrategy,
             "ingest:scheming_csv": csv.CsvStrategy,
         }
