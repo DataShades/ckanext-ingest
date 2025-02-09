@@ -1,5 +1,6 @@
 from __future__ import annotations
-
+import contextlib
+import chardet
 import csv
 import logging
 from io import StringIO
@@ -22,9 +23,23 @@ class CsvSimpleStrategy(shared.ExtractionStrategy):
         options: shared.StrategyOptions,
     ) -> Iterable[dict[str, Any]]:
         reader_options: dict[str, Any] = shared.get_extra(options, "reader_options", {})
-        str_stream = StringIO(source.read().decode())
+        encoding = reader_options.get("encoding")
+        content = source.read()
+        if not encoding:
+            encoding = chardet.detect(content)["encoding"]
+        if not encoding:
+            encoding = "utf8"
+
+        str_stream = StringIO(content.decode(encoding))
+        if "dialect" not in reader_options:
+            sample = str_stream.read(1024)
+            str_stream.seek(0)
+            with contextlib.suppress(csv.Error):
+                dialect = csv.Sniffer().sniff(sample)
+                reader_options = dict(reader_options, dialect=dialect)
 
         return csv.DictReader(str_stream, **reader_options)
+
 
 class CsvStrategy(CsvSimpleStrategy):
     """Transform CSV records into datasets using ckanext-scheming.
@@ -35,4 +50,5 @@ class CsvStrategy(CsvSimpleStrategy):
     will be used as a data source for this field.
 
     """
+
     record_factory = PackageRecord
