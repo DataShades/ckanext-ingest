@@ -6,9 +6,34 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
-## [1.4.3](https://github.com/DataShades/ckanext-ingest/releases/tag/1.4.3) - 2025-02-06
+## [1.4.6](https://github.com/DataShades/ckanext-ingest/releases/tag/1.4.6) - 2025-02-09
 
-<small>[Compare with v1.4.2](https://github.com/DataShades/ckanext-ingest/compare/v1.4.2...1.4.3)</small>
+<small>[Compare with v1.4.5](https://github.com/DataShades/ckanext-ingest/compare/v1.4.5...1.4.6)</small>
+
+### Features
+
+- add get_handler_for_name shared function ([0b5d463](https://github.com/DataShades/ckanext-ingest/commit/0b5d463fabafdc01ddb95bd466f3461635cd5677) by Sergey Motornyuk).
+- smarter CSV parser with encoding and delimiter detection ([eb02943](https://github.com/DataShades/ckanext-ingest/commit/eb02943cc4f13cba1ad69d379901cd1ec95f3713) by Sergey Motornyuk).
+
+## [v1.4.5](https://github.com/DataShades/ckanext-ingest/releases/tag/v1.4.5) - 2025-02-08
+
+<small>[Compare with v1.4.4](https://github.com/DataShades/ckanext-ingest/compare/v1.4.4...v1.4.5)</small>
+
+### Features
+
+- add json_list strategy ([37c242c](https://github.com/DataShades/ckanext-ingest/commit/37c242c7b92ee2da55780db73b657de654606662) by Sergey Motornyuk).
+
+## [v1.4.4](https://github.com/DataShades/ckanext-ingest/releases/tag/v1.4.4) - 2025-02-06
+
+<small>[Compare with v1.4.3](https://github.com/DataShades/ckanext-ingest/compare/v1.4.3...v1.4.4)</small>
+
+### Bug Fixes
+
+- add application/csv to CSV strategy types ([a74f961](https://github.com/DataShades/ckanext-ingest/commit/a74f9615b5e93032896cbd7455308b38024661aa) by Sergey Motornyuk).
+
+## [v1.4.3](https://github.com/DataShades/ckanext-ingest/releases/tag/v1.4.3) - 2025-02-06
+
+<small>[Compare with v1.4.2](https://github.com/DataShades/ckanext-ingest/compare/v1.4.2...v1.4.3)</small>
 
 ### Features
 
