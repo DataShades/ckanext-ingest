@@ -4,6 +4,7 @@ import dataclasses
 import logging
 from copy import deepcopy
 from io import BytesIO
+import mimetypes
 from typing import IO, Any, Callable, ClassVar, Iterable, TypeVar
 
 from typing_extensions import TypedDict
@@ -179,6 +180,19 @@ def get_handler_for_mimetype(
         return choices[0]()
 
     return None
+
+
+def get_handler_for_name(
+    name: str,
+    source: Storage,
+) -> ExtractionStrategy | None:
+    """Select the most suitable handler for the given filename.
+
+    The first strategy that `must_handle` is returned. If there is no such
+    strategy, the first that `can_handle` is returned.
+
+    """
+    return get_handler_for_mimetype(mimetypes.guess_type(name)[0], source)
 
 
 def make_storage(
